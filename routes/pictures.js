@@ -14,13 +14,15 @@ router.get('/', async function (req, res, next) {
     Prefix: 'public/',
   };
   const allObjects = await s3.listObjects(params).promise();
-  const keys = allObjects?.Contents.map((x) => x.key);
+  const keys = allObjects?.Contents.map((x) => x.Key).slice(0, 3);
+
+  console.log(keys);
   const pictures = await Promise.all(
     keys.map(async (key) => {
       let my_file = await s3
         .getObject({
           Bucket: process.env.CYCLIC_BUCKET_NAME,
-          key: key,
+          Key: key,
         })
         .promise();
       return {
@@ -29,6 +31,8 @@ router.get('/', async function (req, res, next) {
       };
     })
   );
+
+  console.log(pictures);
   res.render('pictures', { pictures: pictures });
 });
 
@@ -40,11 +44,13 @@ router.post('/', async function (req, res, next) {
   const file = req.files.file;
   // save locally
   // fs.writeFileSync(path.join(__dirname, '../pictures/', file.name), file.data);
-  await s3.putObject({
-    Body: file.data,
-    Bucket: process.env.CYCLIC_BUCKET_NAME,
-    key: 'public/' + file.name,
-  });
+  await s3
+    .putObject({
+      Body: file.data,
+      Bucket: process.env.CYCLIC_BUCKET_NAME,
+      Key: 'public/' + file.name,
+    })
+    .promise();
   res.end();
 });
 

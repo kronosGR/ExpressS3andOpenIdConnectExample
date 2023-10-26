@@ -15,13 +15,13 @@ router.get('/', async function (req, res, next) {
     Prefix: 'public/',
   };
   const allObjects = await s3.listObjects(params).promise();
-  const keys = allObjects?.Contents.map((x) => x.key);
+  const keys = allObjects?.Contents.map((x) => x.Key);
   const pictures = await Promise.all(
     keys.map(async (key) => {
       let my_file = await s3
         .getObject({
           Bucket: process.env.CYCLIC_BUCKET_NAME,
-          key: key,
+          Key: key,
         })
         .promise();
       return {
@@ -30,7 +30,7 @@ router.get('/', async function (req, res, next) {
       };
     })
   );
-  res.render('index', { pictures: pictures });
+  res.render('index', { pictures: pictures, title: 'Express' });
 });
 
 module.exports = router;
