@@ -4,8 +4,9 @@ const path = require('path');
 const router = express.Router();
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
+const { requiresAuth } = require('express-openid-connect');
 
-router.get('/', async function (req, res, next) {
+router.get('/', requiresAuth(), async function (req, res, next) {
   // locally
   // const pictures = fs.readdirSync(path.join(__dirname, '../pictures/'));
   const params = {
@@ -40,7 +41,7 @@ router.get('/:pictureName', function (req, res, next) {
   res.render('pictureDetails', { picture: req.params.pictureName });
 });
 
-router.post('/', async function (req, res, next) {
+router.post('/', requiresAuth(), async function (req, res, next) {
   const file = req.files.file;
   // save locally
   // fs.writeFileSync(path.join(__dirname, '../pictures/', file.name), file.data);
