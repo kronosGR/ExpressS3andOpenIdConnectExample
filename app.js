@@ -6,11 +6,28 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var picturesRouter = require('./routes/pictures');
+const { auth } = require('express-openid-connect');
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+};
+
+const port = process.env.PORT || 3000;
+if (
+  !config.baseURL &&
+  !process.env.BASE_URL & process.env.PORT &&
+  process.env.NODE_ENV !== 'production'
+) {
+  config.baseURL = `http://localhost:${port}`;
+}
 
 const fileUpload = require('express-fileupload');
 require('dotenv').config();
 
 var app = express();
+
+app.use(auth(config));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,6 +41,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'pictures')));
 
 app.use(fileUpload());
+
+app.use(function (req, res, next) {
+  res.locals.user = req.oidc.user;
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/pictures', picturesRouter);

@@ -10,6 +10,11 @@
 </head>
 
 <body>
+  <% if(locals.isAuthenticated){ %>
+  <p>You are logged in.</p>
+  <% } else { %>
+  <p>You are not logged in. <a href="/login" class="unerline">Login</a>.</p>
+  <% } %>
   <h1><%= title %></h1>
   <p>Welcome to <%= title %></p>
   <% pictures.forEach(function(picture){ %>
