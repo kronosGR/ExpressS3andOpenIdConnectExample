@@ -1,0 +1,35 @@
+{
+  "name": "expresss3andopenidconnectexample",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1481.0",
+    "cookie-parser": "~1.4.4",
+    "D": "^1.0.0",
+    "debug": "~2.6.9",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.1",
+    "express-openid-connect": "^2.17.0",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "@types/aws-sdk": "^2.7.0",
+    "@types/cookie-parser": "^1.4.5",
+    "@types/debug": "^4.1.10",
+    "@types/dotenv": "^8.2.0",
+    "@types/ejs": "^3.1.4",
+    "@types/express": "^4.17.20",
+    "@types/express-fileupload": "^1.4.3",
+    "@types/http-errors": "^2.0.3",
+    "@types/morgan": "^1.9.7",
+    "@types/nodemon": "^1.19.4",
+    "nodemon": "^3.0.1"
+  }
+}
