@@ -12,7 +12,7 @@ router.get('/', requiresAuth(), async function (req, res, next) {
   const params = {
     Bucket: process.env.CYCLIC_BUCKET_NAME,
     Delimiter: '/',
-    Prefix: 'public/',
+    Prefix: req.oidc.user.email + '/',
   };
   const allObjects = await s3.listObjects(params).promise();
   const keys = allObjects?.Contents.map((x) => x.Key).slice(0, 3);
@@ -45,11 +45,12 @@ router.post('/', requiresAuth(), async function (req, res, next) {
   const file = req.files.file;
   // save locally
   // fs.writeFileSync(path.join(__dirname, '../pictures/', file.name), file.data);
+
   await s3
     .putObject({
       Body: file.data,
       Bucket: process.env.CYCLIC_BUCKET_NAME,
-      Key: 'public/' + file.name,
+      Key: req.oidc.user.email + '/' + file.name,
     })
     .promise();
   res.end();
